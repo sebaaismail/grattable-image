@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        function drawCanvas() {
+  var x = document.createElement("IMG");
+  x.setAttribute("src", "img.jpg");
+  x.addEventListener('load', e => {
+    var c = document.getElementById("canvas");
+    ctx = c.getContext('2d');
+    //c.width = window.innerWidth;
+    //c.height = window.innerHeight;
+    ctx.drawImage(x, 0, 0);
+  })
+}
+drawCanvas();
+    </script>
+</body>
+</html>
