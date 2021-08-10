@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+<div id="canvas" />
+   
+
+
+    <div style="display:none;">
+        <img id="source" src="https://i.ibb.co/Z1p8973/background-B.jpg">
+    </div>
+
+    <script>
+
+        function createCanvas(parent, width, height) {
+            var canvas = {};
+            canvas.node = document.createElement('canvas');
+            canvas.context = canvas.node.getContext('2d');
+            canvas.node.width = width || 100;
+            canvas.node.height = height || 100;
+
+
+            parent.appendChild(canvas.node);
+            return canvas;
+        }
+
+        function init(container, width, height, fillColor) {
+            var canvas = createCanvas(container, width, height);
+            var ctx = canvas.context;
+
+
+            const img = document.getElementById('source');
+
+            img.addEventListener('load', e => {
+                ctx.drawImage(img, 0, 0, width, height);//, 104, 124, 21, 20, 87, 104);
+            });
+
+            // define a custom fillCircle method
+            ctx.fillCircle = function (x, y, radius) {
+                this.fillStyle = fillColor;
+                this.beginPath();
+                this.moveTo(x, y);
+                this.arc(x, y, radius, 0, Math.PI * 10, false);
+                this.fill();
+            };
+
+            // bind mouse events
+            canvas.node.onmousemove = function (e) {
+                if (!canvas.isDrawing) {
+                    return;
+                }
+                var x = e.pageX - this.offsetLeft;
+                var y = e.pageY - this.offsetTop;
+                var radius = 10; // or whatever
+                var fillColor = '#ff0000';
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.fillCircle(x, y, radius, fillColor);
+            };
+            canvas.node.onmousedown = function (e) {
+                canvas.isDrawing = true;
+            };
+            canvas.node.onmouseup = function (e) {
+                canvas.isDrawing = false;
+            };
+
+            canvas.node.ontouchmove = function (event) {
+                event.preventDefault();
+                for (let index = 0; index < event.touches.length; index++) {
+                    const touch = event.touches[index];
+
+                    const x = touch.pageX - this.offsetLeft;
+                    const y = touch.pageY - this.offsetTop;
+
+                    const radius = 40; // or whatever
+                    const fillColor = '#ff0000';
+
+                    ctx.globalCompositeOperation = 'destination-out';
+                    ctx.fillCircle(x, y, radius, fillColor);
+                }
+            };
+        }
+
+        var container = document.getElementById('canvas');
+        console.log("w: ", window.innerWidth);
+        console.log("h: ", window.innerHeight);
+        const ratio = window.innerWidth / window.innerHeight;
+        const height = window.innerHeight;
+        const width = height / ratio;
+
+        init(container, width, height);
+
+      
+        //https://i.ibb.co/JFdZ3YB/A.png        //https://i.ibb.co/k44DNvP/B.png
+
+      
+    </script>
+
+    <style>
+        canvas {
+            background: url('https://i.ibb.co/PQKcG9k/background-A.jpg') center center/ cover no-repeat;
+            background-size: 100% 100%;
+
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            padding-left: 0;
+            padding-right: 0;
+        }
+    </style>
+</body>
+
+</html>
