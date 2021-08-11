@@ -10,10 +10,7 @@
 
 <body>
 
-
-<div id="canvas" />
-   
-
+    <div id="canvas" />
 
     <div style="display:none;">
         <img id="source" src="https://i.ibb.co/Z1p8973/background-B.jpg">
@@ -21,12 +18,22 @@
 
     <script>
 
+        /**
+         *  SCRIPT DE L'IMAGE GRATTABLE
+         * 
+         * Noublier pas de Specifier les dimensions réels des images.
+         **/
+
+
+        var largeur_image = 1080;
+        var hauteur_image = 1920;
+
         function createCanvas(parent, width, height) {
             var canvas = {};
             canvas.node = document.createElement('canvas');
             canvas.context = canvas.node.getContext('2d');
-            canvas.node.width = width || 100;
-            canvas.node.height = height || 100;
+            canvas.node.width = width;
+            canvas.node.height = height;
 
 
             parent.appendChild(canvas.node);
@@ -37,10 +44,10 @@
             var canvas = createCanvas(container, width, height);
             var ctx = canvas.context;
 
-
             const img = document.getElementById('source');
 
             img.addEventListener('load', e => {
+
                 ctx.drawImage(img, 0, 0, width, height);//, 104, 124, 21, 20, 87, 104);
             });
 
@@ -90,25 +97,37 @@
         }
 
         var container = document.getElementById('canvas');
-        console.log("w: ", window.innerWidth);
-        console.log("h: ", window.innerHeight);
-        const ratio = window.innerWidth / window.innerHeight;
-        const height = window.innerHeight;
-        const width = height / ratio;
+
+        var width;
+        var height;
+
+        const imgRatio = largeur_image / hauteur_image;
+                console.log("img ratio: ", imgRatio);
+
+
+                const deviceRatio = window.innerWidth / window.innerHeight;
+                console.log("device ratio: ", deviceRatio);
+
+                if (deviceRatio < imgRatio) {
+                    width = window.innerWidth;
+                    height = width / imgRatio;
+                } else {
+                    height = window.innerHeight * 0.96;
+                    width = height * imgRatio;
+                }
 
         init(container, width, height);
 
-      
+
         //https://i.ibb.co/JFdZ3YB/A.png        //https://i.ibb.co/k44DNvP/B.png
 
-      
+
     </script>
 
     <style>
         canvas {
             background: url('https://i.ibb.co/PQKcG9k/background-A.jpg') center center/ cover no-repeat;
             background-size: 100% 100%;
-
             display: block;
             margin-left: auto;
             margin-right: auto;
